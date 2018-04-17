@@ -1,5 +1,8 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using Microsoft.Diagnostics.Tracing.Session;
 
 using CefSharp;
 using CefSharp.WinForms;
@@ -10,12 +13,15 @@ namespace EtwViewer
     {
         private ChromiumWebBrowser _chromiumWebBrowser;
         private JsToSharp _jsToSharp;
+        private TraceEventSession _etwSession;
 
         public Form1()
         {
             InitializeComponent();
             InitializeChromium();
             Controls.Add(_chromiumWebBrowser);
+
+            Task.Run(() => WatchForEtwEvents());
         }
 
         private void InitializeChromium()
@@ -45,7 +51,6 @@ namespace EtwViewer
         private void OnBrowserInitialized(object sender, IsBrowserInitializedChangedEventArgs e)
         {
             Debug.WriteLine("Browser initialized");
-            _chromiumWebBrowser.ShowDevTools();
         }
 
         private void OnFrameLoadEnd(object sender, FrameLoadEndEventArgs e)
@@ -53,9 +58,16 @@ namespace EtwViewer
             Debug.WriteLine("Frame load end");
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
+            _etwSession.Stop();
             Cef.Shutdown();
+        }
+
+        private void WatchForEtwEvents()
+        {
+            _etwSession = new TraceEventSession("EtwViewer");
+            _etwSession.Source.Process();
         }
     }
 }

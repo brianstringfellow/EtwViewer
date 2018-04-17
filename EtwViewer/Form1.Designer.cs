@@ -37,7 +37,7 @@
             this.ClientSize = new System.Drawing.Size(2090, 1072);
             this.Name = "Form1";
             this.Text = "ETW Viewer";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.ResumeLayout(false);
 
         }
