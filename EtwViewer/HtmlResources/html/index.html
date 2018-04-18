@@ -3,16 +3,50 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1" />-->
     <title></title>
-    <style> html, body { margin: 0; padding: 0; height: 100%; }</style>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
 
     <link type="text/css" rel="stylesheet" href="../css/ag-grid.css" />
+    <link type="text/css" rel="stylesheet" href="../css/bootstrap.min.css">
 
     <script type="text/javascript" src="../lib/ag-grid.js"></script>
+    <script type="text/javascript" src="../lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/etw-viewer.js"></script>
 </head>
 <body>
-    <button onclick="jsToSharp.showDevTools();">Open Chrome Debugger</button>
+    <button type="button" class="btn btn-info btn_lg" data-toggle="modal" data-target="#myModal">ETW Providers</button>
+    <button type="button" class="btn btn-info btn_lg" onclick="jsToSharp.showDevTools();">Open Chrome Debugger</button>
     <div id="mainGrid" style="height: 93%; width: 100%" class="ag-theme-fresh">Placehold for 'mainGrid'</div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">ETW Providers</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Placeholder for editable grid</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Update</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
+
+<!--https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_modal&stacked=h-->
