@@ -1,13 +1,13 @@
 ﻿var mainColumnDefs = [
-    { headerName: 'Make', field: 'make' },
-    { headerName: 'Model', field: 'model' },
-    { headerName: 'Price', field: 'price' }
+    //{ headerName: 'Make', field: 'make' },
+    //{ headerName: 'Model', field: 'model' },
+    //{ headerName: 'Price', field: 'price' }
 ];
 
 var mainRowData = [
-    { make: 'Toyota', model: 'Celica', price: 35000 },
-    { make: 'Ford', model: 'Fairlane', price: 23000 },
-    { make: 'Chevy', model: 'Chevelle', price: 28000 }
+    //{ make: 'Toyota', model: 'Celica', price: 35000 },
+    //{ make: 'Ford', model: 'Fairlane', price: 23000 },
+    //{ make: 'Chevy', model: 'Chevelle', price: 28000 }
 ];
 
 var modalColumnDefs = [
@@ -54,9 +54,15 @@ var modalGridOptions = {
 document.addEventListener('DOMContentLoaded', function () {
     var mainGridDiv = document.querySelector('#mainGrid');
     new agGrid.Grid(mainGridDiv, mainGridOptions);
+    $('#mainGrid').contents().filter(function () {
+        return this.nodeType === 3;
+    }).remove();
 
     var modalGridDiv = document.querySelector('#modalGrid');
     new agGrid.Grid(modalGridDiv, modalGridOptions);
+    $('#modalGrid').contents().filter(function () {
+        return this.nodeType === 3;
+    }).remove();
 });
 
 (async function () {
@@ -76,7 +82,35 @@ function getProviderNames() {
 }
 
 function updateProviderNames() {
+    modalRowData = [];
+    modalGridOptions.api.forEachNode(function (node) {
+        modalRowData.push(node.data);
+    });
     var providerNames = modalRowData.map(item => item.providerName).join(',');
     jsToSharp.updateProviderNames(providerNames);
     console.log(providerNames);
+}
+
+function addColumn(columnName) {
+    mainColumnDefs.push({ headerName: columnName, field: columnName });
+    mainGridOptions.api.setColumnDefs(mainColumnDefs);
+}
+
+function addRow(rowJson) {
+    mainGridOptions.api.updateRowData({ add: [rowJson] });
+}
+
+function clearData() {
+    mainGridOptions.api.setRowData([]);
+}
+
+function removeSelectedProviderNames() {
+    var selectedRow = modalGridOptions.api.getSelectedRows();
+    modalGridOptions.api.updateRowData({ remove: selectedRow });
+    console.log('Remove rows');
+}
+
+function addProviderName() {
+    modalGridOptions.api.updateRowData({ add: [{ providerName: 'new' }] });
+    console.log('Add row');
 }
