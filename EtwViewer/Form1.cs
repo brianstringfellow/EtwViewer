@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Microsoft.Diagnostics.Tracing.Session;
+using Newtonsoft.Json;
 
 using CefSharp;
 using CefSharp.WinForms;
@@ -14,6 +16,7 @@ namespace EtwViewer
         private ChromiumWebBrowser _chromiumWebBrowser;
         private JsToSharp _jsToSharp;
         private TraceEventSession _etwSession;
+        public string[] ProviderNames { get; private set; }
 
         public Form1()
         {
@@ -21,7 +24,20 @@ namespace EtwViewer
             InitializeChromium();
             Controls.Add(_chromiumWebBrowser);
 
+            ProviderNames = JsonConvert.DeserializeObject<string[]>(Properties.Settings.Default.ProviderNames);
+
             Task.Run(() => WatchForEtwEvents());
+        }
+
+        public void UpdateProviderNames(string[] providerNames)
+        {
+            var removed = ProviderNames.Except(providerNames);
+            var added = providerNames.Except(ProviderNames);
+
+            // TODO: update etw session listeners
+
+            //Properties.Settings.Default.ProviderNames = JsonConvert.SerializeObject(ProviderNames);
+            //Properties.Settings.Default.Save();
         }
 
         private void InitializeChromium()
@@ -36,7 +52,7 @@ namespace EtwViewer
             _chromiumWebBrowser.IsBrowserInitializedChanged += OnBrowserInitialized;
             _chromiumWebBrowser.FrameLoadEnd += OnFrameLoadEnd;
 
-            _jsToSharp = new JsToSharp(_chromiumWebBrowser);
+            _jsToSharp = new JsToSharp(_chromiumWebBrowser, this);
             _chromiumWebBrowser.JavascriptObjectRepository.Register("jsToSharp", _jsToSharp, true);
 
             var browserSettings = new BrowserSettings
