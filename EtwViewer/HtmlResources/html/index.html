@@ -19,14 +19,17 @@
     <script type="text/javascript" src="../lib/ag-grid.js"></script>
     <script type="text/javascript" src="../lib/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../lib/clipboard.min.js"></script>
     <script type="text/javascript" src="../js/etw-viewer.js"></script>
 </head>
 <body>
+    <button type="button" class="btn btn-info btn-sm" onclick="togglePause();">Pause</button>
+    <button type="button" class="btn btn-info btn-sm btn-copy" data-clipboard-snippet>Copy Rows</button>
     <button type="button" class="btn btn-info btn-sm" onclick="getProviderNames();" data-toggle="modal" data-target="#myModal">ETW Providers</button>
     <button type="button" class="btn btn-info btn-sm" onclick="clearData();">Clear Data</button>
     <button type="button" class="btn btn-info btn-sm" onclick="jsToSharp.showDevTools();">Open Chrome Debugger</button>
     <div id="mainGrid" style="height: 93%; width: 100%" class="ag-theme-fresh">Placeholder for 'mainGrid'</div>
-    
+
     <!-- Modal -->
     <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">

@@ -1,4 +1,6 @@
-﻿var mainColumnDefs = [
+﻿var pauseToggle = false;
+
+var mainColumnDefs = [
     //{ headerName: 'Make', field: 'make' },
     //{ headerName: 'Model', field: 'model' },
     //{ headerName: 'Price', field: 'price' }
@@ -63,6 +65,13 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#modalGrid').contents().filter(function () {
         return this.nodeType === 3;
     }).remove();
+
+    new ClipboardJS('.btn-copy', {
+        text: function (trigger) {
+            var textToCopy = copyRows();
+            return textToCopy;
+        }
+    });
 });
 
 (async function () {
@@ -97,7 +106,9 @@ function addColumn(columnName) {
 }
 
 function addRow(rowJson) {
-    mainGridOptions.api.updateRowData({ add: [rowJson] });
+    if (!pauseToggle) {
+        mainGridOptions.api.updateRowData({ add: [rowJson] });
+    }
 }
 
 function clearData() {
@@ -105,8 +116,8 @@ function clearData() {
 }
 
 function removeSelectedProviderNames() {
-    var selectedRow = modalGridOptions.api.getSelectedRows();
-    modalGridOptions.api.updateRowData({ remove: selectedRow });
+    var selectedRows = modalGridOptions.api.getSelectedRows();
+    modalGridOptions.api.updateRowData({ remove: selectedRows });
     console.log('Remove rows');
 }
 
@@ -114,3 +125,33 @@ function addProviderName() {
     modalGridOptions.api.updateRowData({ add: [{ providerName: 'new' }] });
     console.log('Add row');
 }
+
+function togglePause() {
+    pauseToggle = !pauseToggle;
+    console.log('Toggle pause');
+}
+
+function copyRows() {
+    var gridColumns = mainGridOptions.columnApi.getAllGridColumns().map(function (column) {
+        return column.colDef.headerName;
+    });
+    var columnNames = gridColumns.join('\t');
+
+    var selectedRows = mainGridOptions.api.getSelectedRows();
+    var columnValues = selectedRows.map(function (row) {
+        return gridColumns.map(function (columnName) {
+            var value = row[columnName];
+            if (typeof value === 'undefined') {
+                return '<empty>'
+            } else {
+                return value;
+            }
+        });
+    })
+
+    var textToCopy = columnNames + '\n' + columnValues.map(row => row.join('\t')).join('\n');
+    console.log('Copy rows');
+    return textToCopy;
+}
+
+
