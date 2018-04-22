@@ -154,4 +154,13 @@ function copyRows() {
     return textToCopy;
 }
 
+function autoSizeAll() {
+    var allColumnIds = [];
+    mainGridOptions.columnApi.getAllColumns().forEach(function (column) {
+        allColumnIds.push(column.colId);
+    });
+    mainGridOptions.columnApi.autoSizeColumns(allColumnIds);
+    console.log('Column resize');
+}
+
 

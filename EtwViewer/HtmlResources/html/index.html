@@ -11,6 +11,12 @@
             padding: 0;
             height: 100%;
         }
+
+        .ag-body {
+            font-family: Consolas;
+            font-size: 11px;
+        }
+
     </style>
 
     <link type="text/css" rel="stylesheet" href="../css/ag-grid.css" />
@@ -23,11 +29,12 @@
     <script type="text/javascript" src="../js/etw-viewer.js"></script>
 </head>
 <body>
-    <button type="button" class="btn btn-info btn-sm" onclick="togglePause();">Pause</button>
-    <button type="button" class="btn btn-info btn-sm btn-copy" data-clipboard-snippet>Copy Rows</button>
-    <button type="button" class="btn btn-info btn-sm" onclick="getProviderNames();" data-toggle="modal" data-target="#myModal">ETW Providers</button>
-    <button type="button" class="btn btn-info btn-sm" onclick="clearData();">Clear Data</button>
-    <button type="button" class="btn btn-info btn-sm" onclick="jsToSharp.showDevTools();">Open Chrome Debugger</button>
+    <button class="btn btn-info btn-sm" onclick="autoSizeAll()">Fit Columns</button>
+    <button class="btn btn-info btn-sm" onclick="togglePause();">Pause</button>
+    <button class="btn btn-info btn-sm btn-copy" data-clipboard-snippet>Copy Rows</button>
+    <button class="btn btn-info btn-sm" onclick="getProviderNames();" data-toggle="modal" data-target="#myModal">ETW Providers</button>
+    <button class="btn btn-info btn-sm" onclick="clearData();">Clear Data</button>
+    <button class="btn btn-info btn-sm" onclick="jsToSharp.showDevTools();">Open Chrome Debugger</button>
     <div id="mainGrid" style="height: 93%; width: 100%" class="ag-theme-fresh">Placeholder for 'mainGrid'</div>
 
     <!-- Modal -->
@@ -36,17 +43,17 @@
             <!-- Modal content -->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">ETW Providers</h4>
                 </div>
                 <div class="modal-body">
-                    <button type="button" class="btn btn-info btn-sm" onclick="addProviderName()">Add</button>
-                    <button type="button" class="btn btn-info btn-sm" onclick="removeSelectedProviderNames()">Remove Selected</button>
+                    <button class="btn btn-info btn-sm" onclick="addProviderName()">Add</button>
+                    <button class="btn btn-info btn-sm" onclick="removeSelectedProviderNames()">Remove Selected</button>
                     <div id="modalGrid" style="height: 300px; width: 100%" class="ag-theme-fresh">Placeholder for 'modalGrid'</div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" onclick="updateProviderNames();" data-dismiss="modal">Update</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-default" onclick="updateProviderNames();" data-dismiss="modal">Update</button>
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
