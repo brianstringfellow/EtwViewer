@@ -52,8 +52,8 @@ namespace EtwViewer
 
             ProviderNames = providerNames;
 
-            //Properties.Settings.Default.ProviderNames = JsonConvert.SerializeObject(ProviderNames);
-            //Properties.Settings.Default.Save();
+            Properties.Settings.Default.ProviderNames = JsonConvert.SerializeObject(ProviderNames);
+            Properties.Settings.Default.Save();
         }
 
         private void InitializeChromium()
