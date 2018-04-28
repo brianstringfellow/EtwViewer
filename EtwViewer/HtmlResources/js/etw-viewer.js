@@ -13,7 +13,7 @@ var mainRowData = [
 ];
 
 var modalColumnDefs = [
-    { headerName: 'ETW (EventSource) Provider Name', field: 'providerName', width: 1000 },
+    { headerName: 'ETW (EventSource) Provider Name', field: 'providerName', width: 1000 }
 ];
 
 var modalRowData = [
@@ -45,10 +45,6 @@ var modalGridOptions = {
     defaultColDef: {
         editable: true
     },
-    enableRangeSelection: true,
-    rowSelection: 'multiple',
-    pagination: true,
-    paginationAutoPageSize: true
 };
 
 // Wait for the document to be loaded, otherwise
@@ -91,6 +87,7 @@ function getProviderNames() {
 }
 
 function updateProviderNames() {
+    modalGridOptions.api.stopEditing();
     modalRowData = [];
     modalGridOptions.api.forEachNode(function (node) {
         modalRowData.push(node.data);
@@ -142,12 +139,12 @@ function copyRows() {
         return gridColumns.map(function (columnName) {
             var value = row[columnName];
             if (typeof value === 'undefined') {
-                return '<empty>'
+                return '<empty>';
             } else {
                 return value;
             }
         });
-    })
+    });
 
     var textToCopy = columnNames + '\n' + columnValues.map(row => row.join('\t')).join('\n');
     console.log('Copy rows');
