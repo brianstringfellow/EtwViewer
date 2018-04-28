@@ -45,6 +45,7 @@ var modalGridOptions = {
     defaultColDef: {
         editable: true
     },
+    rowSelection: 'single'
 };
 
 // Wait for the document to be loaded, otherwise
@@ -115,11 +116,17 @@ function clearData() {
 function removeSelectedProviderNames() {
     var selectedRows = modalGridOptions.api.getSelectedRows();
     modalGridOptions.api.updateRowData({ remove: selectedRows });
+
+    var cell = modalGridOptions.api.getFocusedCell();
+    modalGridOptions.api.getModel().rowsToDisplay[cell.rowIndex].setSelected(true);
     console.log('Remove rows');
 }
 
 function addProviderName() {
     modalGridOptions.api.updateRowData({ add: [{ providerName: 'new' }] });
+
+    var rowIndex = modalGridOptions.api.getLastDisplayedRow()
+    modalGridOptions.api.startEditingCell({ rowIndex: rowIndex, colKey: 'providerName' });
     console.log('Add row');
 }
 
