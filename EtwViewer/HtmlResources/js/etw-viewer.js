@@ -12,15 +12,21 @@ var mainRowData = [
     //{ make: 'Chevy', model: 'Chevelle', price: 28000 }
 ];
 
-var modalColumnDefs = [
+var providerColumnDefs = [
     { headerName: 'ETW (EventSource) Provider Name', field: 'providerName', width: 1000 }
 ];
 
-var modalRowData = [
+var providerRowData = [
     { providerName: 'CompanyA-ProductA-ComponentA' },
     { providerName: 'CompanyA-ProductA-ComponentB' },
     { providerName: 'CompanyB-ProductC-ComponentD' }
 ];
+
+var columnColumnDefs = [
+    { headerName: 'Column Name', field: 'columnName', width: 1000, checkboxSelection: true }
+];
+
+var columnRowData = [];
 
 // Define the grid options
 var mainGridOptions = {
@@ -37,15 +43,24 @@ var mainGridOptions = {
     paginationAutoPageSize: true
 };
 
-var modalGridOptions = {
-    rowData: modalRowData,
-    columnDefs: modalColumnDefs,
+var providerGridOptions = {
+    rowData: providerRowData,
+    columnDefs: providerColumnDefs,
     enableColResize: true,
     enableSorting: true,
     defaultColDef: {
         editable: true
     },
     rowSelection: 'single'
+};
+
+var columnGridOptions = {
+    rowData: columnRowData,
+    columnDefs: columnColumnDefs,
+    enableColResize: true,
+    enableSorting: true,
+    suppressRowClickSelection: true,
+    rowSelection: 'multiple'
 };
 
 // Wait for the document to be loaded, otherwise
@@ -57,9 +72,15 @@ document.addEventListener('DOMContentLoaded', function () {
         return this.nodeType === 3;
     }).remove();
 
-    var modalGridDiv = document.querySelector('#modalGrid');
-    new agGrid.Grid(modalGridDiv, modalGridOptions);
-    $('#modalGrid').contents().filter(function () {
+    var providerGridDiv = document.querySelector('#providerGrid');
+    new agGrid.Grid(providerGridDiv, providerGridOptions);
+    $('#providerGrid').contents().filter(function () {
+        return this.nodeType === 3;
+    }).remove();
+
+    var columnGridDiv = document.querySelector('#columnGrid');
+    new agGrid.Grid(columnGridDiv, columnGridOptions);
+    $('#columnGrid').contents().filter(function () {
         return this.nodeType === 3;
     }).remove();
 
@@ -69,6 +90,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return textToCopy;
         }
     });
+
+    $('#columnModal').on('hidden.bs.modal', function (e) {
+        getColumnSelections();
+    });
 });
 
 (async function () {
@@ -76,8 +101,8 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 
 function setProviderNames(names) {
-    modalRowData = names.map(n => ({ providerName: n }));
-    modalGridOptions.api.setRowData(modalRowData);
+    providerRowData = names.map(n => ({ providerName: n }));
+    providerGridOptions.api.setRowData(providerRowData);
     console.log('Updated provider names, row count: ' + names.length);
 }
 
@@ -88,12 +113,12 @@ function getProviderNames() {
 }
 
 function updateProviderNames() {
-    modalGridOptions.api.stopEditing();
-    modalRowData = [];
-    modalGridOptions.api.forEachNode(function (node) {
-        modalRowData.push(node.data);
+    providerGridOptions.api.stopEditing();
+    providerRowData = [];
+    providerGridOptions.api.forEachNode(function (node) {
+        providerRowData.push(node.data);
     });
-    var providerNames = modalRowData.map(item => item.providerName).join(',');
+    var providerNames = providerRowData.map(item => item.providerName).join(',');
     jsToSharp.updateProviderNames(providerNames);
     console.log(providerNames);
 }
@@ -101,6 +126,8 @@ function updateProviderNames() {
 function addColumn(columnName) {
     mainColumnDefs.push({ headerName: columnName, field: columnName });
     mainGridOptions.api.setColumnDefs(mainColumnDefs);
+
+    columnGridOptions.api.updateRowData({ add: [{ columnName: columnName }] });
 }
 
 function addRow(rowJson) {
@@ -114,19 +141,19 @@ function clearData() {
 }
 
 function removeSelectedProviderNames() {
-    var selectedRows = modalGridOptions.api.getSelectedRows();
-    modalGridOptions.api.updateRowData({ remove: selectedRows });
+    var selectedRows = providerGridOptions.api.getSelectedRows();
+    providerGridOptions.api.updateRowData({ remove: selectedRows });
 
-    var cell = modalGridOptions.api.getFocusedCell();
-    modalGridOptions.api.getModel().rowsToDisplay[cell.rowIndex].setSelected(true);
+    var cell = providerGridOptions.api.getFocusedCell();
+    providerGridOptions.api.getModel().rowsToDisplay[cell.rowIndex].setSelected(true);
     console.log('Remove rows');
 }
 
 function addProviderName() {
-    modalGridOptions.api.updateRowData({ add: [{ providerName: 'new' }] });
+    providerGridOptions.api.updateRowData({ add: [{ providerName: 'new' }] });
 
-    var rowIndex = modalGridOptions.api.getLastDisplayedRow()
-    modalGridOptions.api.startEditingCell({ rowIndex: rowIndex, colKey: 'providerName' });
+    var rowIndex = providerGridOptions.api.getLastDisplayedRow()
+    providerGridOptions.api.startEditingCell({ rowIndex: rowIndex, colKey: 'providerName' });
     console.log('Add row');
 }
 
@@ -165,6 +192,14 @@ function autoSizeAll() {
     });
     mainGridOptions.columnApi.autoSizeColumns(allColumnIds);
     console.log('Column resize');
+}
+
+function getColumnSelections() {
+    var selectedRows = columnGridOptions.api.getSelectedRows();
+    columnGridOptions.api.forEachNode(function (node) {
+        mainGridOptions.columnApi.setColumnVisible(node.data.columnName, !node.selected);
+    });
+    console.log('Column Selections');
 }
 
 

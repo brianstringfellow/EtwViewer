@@ -32,13 +32,14 @@
     <button class="btn btn-info btn-sm" onclick="autoSizeAll()">Fit Columns</button>
     <button class="btn btn-info btn-sm" onclick="togglePause();">Pause</button>
     <button class="btn btn-info btn-sm btn-copy" data-clipboard-snippet>Copy Rows</button>
-    <button class="btn btn-info btn-sm" onclick="getProviderNames();" data-toggle="modal" data-target="#myModal">ETW Providers</button>
+    <button class="btn btn-info btn-sm" onclick="getProviderNames();" data-toggle="modal" data-target="#providerModal">ETW Providers</button>
+    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#columnModal">Hide Columns</button>
     <button class="btn btn-info btn-sm" onclick="clearData();">Clear Data</button>
     <button class="btn btn-info btn-sm" onclick="jsToSharp.showDevTools();">Open Chrome Debugger</button>
     <div id="mainGrid" style="height: 93%; width: 100%" class="ag-theme-fresh">Placeholder for 'mainGrid'</div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
+    <!-- Modal for Provider Dialog -->
+    <div class="modal fade" id="providerModal" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content -->
             <div class="modal-content">
@@ -49,11 +50,26 @@
                 <div class="modal-body">
                     <button class="btn btn-info btn-sm" onclick="addProviderName()">Add</button>
                     <button class="btn btn-info btn-sm" onclick="removeSelectedProviderNames()">Remove Selected</button>
-                    <div id="modalGrid" style="height: 300px; width: 100%" class="ag-theme-fresh">Placeholder for 'modalGrid'</div>
+                    <div id="providerGrid" style="height: 300px; width: 100%" class="ag-theme-fresh">Placeholder for 'providerGrid'</div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default" onclick="updateProviderNames();" data-dismiss="modal">Update</button>
                     <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Hide Column Dialog -->
+    <div class="modal fade" id="columnModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Hide Columns</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="columnGrid" style="height: 300px; width: 100%" class="ag-theme-fresh">Placehold for 'columnGrid'</div>
                 </div>
             </div>
         </div>
