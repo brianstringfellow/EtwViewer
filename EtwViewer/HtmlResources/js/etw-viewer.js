@@ -152,7 +152,7 @@ function removeSelectedProviderNames() {
 function addProviderName() {
     providerGridOptions.api.updateRowData({ add: [{ providerName: 'new' }] });
 
-    var rowIndex = providerGridOptions.api.getLastDisplayedRow()
+    var rowIndex = providerGridOptions.api.getLastDisplayedRow();
     providerGridOptions.api.startEditingCell({ rowIndex: rowIndex, colKey: 'providerName' });
     console.log('Add row');
 }
@@ -160,6 +160,12 @@ function addProviderName() {
 function togglePause() {
     pauseToggle = !pauseToggle;
     console.log('Toggle pause');
+
+    if (pauseToggle) {
+        $("#togglePause").text("Resume");
+    } else {
+        $("#togglePause").text("Pause");
+    }
 }
 
 function copyRows() {
