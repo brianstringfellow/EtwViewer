@@ -9,4 +9,6 @@ Ag-Grid for displaying the traces in a datagrid
 
 The motivation came from using the Diagnostics Event viewer in Visual Studio while debugging applications being developed for service fabric but wanting an ETW viewer that automatically expanded the event payload and enabled hiding of columns. Additionally, there were times when an application was published to service fabric and Visual Studio was not available. Being able to drop a tool onto a machine in the virtual machine scale set to watch the events was also helpful.
 
+NOTE: The EtwViewer can listen for events on only the local system. It cannot listen remotely, such as across a network.
+
 \<END>
